@@ -1,41 +1,36 @@
 <template>
-  
-  <navbar>
-  
+  <nav class="navbar">
     <a href="/">HOME</a>
-
-    <br>
-
     <a href="/">ROLES</a>
-
-    <br>
-
     <a href="/">ABOUT</a>
-
-    <br>
-
     <a href="/">GUIDE</a>
-
-    <br>
-
     <a href="/">FAQ</a>
-
-    <br>
-
     <a href="/">UPDATES</a>
-
-    <br>
-
     <a href="/">RESOURCES</a>
-
-    <br>
-
     <a href="/">COMMUNITY</a>
-
-    <br>
-
     <a href="/">CONTRIBUTE!</a>
-  
-  </navbar>
-  
+  </nav>
 </template>
+
+<style scoped>
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: #1e1e1e;
+  padding: 1rem;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #00bfff;
+}
+</style>
