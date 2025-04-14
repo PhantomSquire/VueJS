@@ -1,37 +1,70 @@
-name: Pagify
+name: Manage Branch
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: 'Branch to create or update'
+        required: true
+        default: 'custom-branch'
 
 jobs:
-  build-and-deploy:
+  manage-branch:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+      - name: Checkout default branch
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Set variables
+        id: vars
+        run: echo "##[set-output name=branch;]${{ github.event.inputs.branch_name }}"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Fetch all branches
+        run: git fetch --all
 
-      - name: Build
-        run: npm run build
-
-      - name: Deploy to dist branch
+      - name: Check if branch exists
+        id: check_branch
         run: |
-          cd dist
-          git init
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git checkout -b dist
-          git add .
-          git commit -m "Deploying To \"dist\" Folder"
-          git push --force origin dist
+          if git ls-remote --exit-code --heads origin ${{ steps.vars.outputs.branch }}; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create empty branch if it doesn't exist
+        if: steps.check_branch.outputs.exists == 'false'
+        run: |
+          git checkout --orphan ${{ steps.vars.outputs.branch }}
+          echo "# ${GITHUB_REPOSITORY}" > README.md
+          git add README.md
+          git commit -m "Initial commit on new branch"
+          git push origin HEAD:${{ steps.vars.outputs.branch }}
+
+      - name: Clone the branch
+        if: steps.check_branch.outputs.exists == 'true'
+        run: |
+          git checkout ${{ steps.vars.outputs.branch }}
+
+      - name: Count files in branch
+        id: file_check
+        if: steps.check_branch.outputs.exists == 'true'
+        run: |
+          file_count=$(ls | wc -l)
+          echo "count=$file_count" >> $GITHUB_OUTPUT
+
+      - name: Add README.md to empty branch
+        if: steps.check_branch.outputs.exists == 'true' && steps.file_check.outputs.count == '0'
+        run: |
+          echo "# Empty branch README" > README.md
+          git add README.md
+          git commit -m "Add README.md to empty branch"
+          git push origin ${{ steps.vars.outputs.branch }}
+
+      - name: Update existing file in non-empty branch
+        if: steps.check_branch.outputs.exists == 'true' && steps.file_check.outputs.count != '0'
+        run: |
+          echo "Updated at $(date)" >> updated.txt
+          git add updated.txt
+          git commit -m "Update existing file"
+          git push origin ${{ steps.vars.outputs.branch }}
