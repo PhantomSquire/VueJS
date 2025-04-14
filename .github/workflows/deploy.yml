@@ -33,5 +33,5 @@ jobs:
           git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git checkout -b dist
           git add .
-          git commit -m "Deploy"
+          git commit -m "Deploying To \"dist\" Folder"
           git push --force origin dist
