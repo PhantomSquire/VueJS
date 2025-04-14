@@ -2,30 +2,33 @@ name: Create Empty Branch
 
 on:
   workflow_dispatch:
-    inputs:
-      branch_name:
-        description: 'Name of the new branch'
-        required: true
 
 jobs:
-  create-branch:
+  create-dist-branch:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
 
-      - name: Create empty orphan branch
+      - name: Create or reset orphan `dist` branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          NEW_BRANCH=${{ github.event.inputs.branch_name }}
-          
-          # Create an orphan branch
-          git checkout --orphan "$NEW_BRANCH"
-          git rm -rf . || true  # Remove all files if any
-          echo "# Empty branch: $NEW_BRANCH" > README.md
+
+          # Fetch all branches
+          git fetch origin
+
+          # Create orphan branch
+          git checkout --orphan dist
+
+          # Remove all tracked files from index and disk
+          git rm -rf . || true
+
+          # Add a placeholder file so the branch can be pushed
+          echo "# Empty dist branch" > README.md
           git add README.md
-          git commit -m "Initial commit on empty branch: $NEW_BRANCH"
-          git push origin "$NEW_BRANCH"
+          git commit -m "Initial commit on empty dist branch"
+
+          # Force push to replace dist branch if it exists
+          git push --force origin dist
