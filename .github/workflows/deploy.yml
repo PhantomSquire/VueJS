@@ -12,9 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Git credentials
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Create and push dist branch
         run: |
           git checkout -b dist
-          git push origin dist
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/PhantomSquire/VueJS.git dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
