@@ -1,0 +1,12 @@
+name: Visual Confirmation Workflow
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm workflow ran
+        run: echo "✅ Workflow executed successfully on release creation!"
