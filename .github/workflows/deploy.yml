@@ -1,4 +1,4 @@
-name: Main Branch Visual Confirmation
+name: Create Dist Branch on Main Update
 
 on:
   push:
@@ -6,8 +6,15 @@ on:
       - main
 
 jobs:
-  confirm:
+  create-dist-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Confirm main branch update
-        run: echo "✅ Workflow triggered by update to main branch!"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create and push dist branch
+        run: |
+          git checkout -b dist
+          git push origin dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
