@@ -1,11 +1,13 @@
-name: Manual Visual Confirmation
+name: Main Branch Visual Confirmation
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   confirm:
     runs-on: ubuntu-latest
     steps:
-      - name: Confirm manual trigger
-        run: echo "✅ Manual workflow executed successfully!"
+      - name: Confirm main branch update
+        run: echo "✅ Workflow triggered by update to main branch!"
