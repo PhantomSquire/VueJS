@@ -2,23 +2,39 @@
   
   <navbar>
   
-    <span>HOME</span>
-    
-    <span>ROLES</span>
+    <a href="/">HOME</a>
 
-    <span>ABOUT</span>
+    <br>
 
-    <span>GUIDE</span>
+    <a href="/">ROLES</a>
 
-    <span>FAQ</span>
+    <br>
 
-    <span>UPDATES</span>
+    <a href="/">ABOUT</a>
 
-    <span>RESOURCES</span>
+    <br>
 
-    <span>COMMUNITY</span>
+    <a href="/">GUIDE</a>
 
-    <span>CONTRIBUTE!</span>
+    <br>
+
+    <a href="/">FAQ</a>
+
+    <br>
+
+    <a href="/">UPDATES</a>
+
+    <br>
+
+    <a href="/">RESOURCES</a>
+
+    <br>
+
+    <a href="/">COMMUNITY</a>
+
+    <br>
+
+    <a href="/">CONTRIBUTE!</a>
   
   </navbar>
   
