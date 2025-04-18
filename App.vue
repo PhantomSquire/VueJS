@@ -1,9 +1,5 @@
-<script setup>
-  import Navbar from './components/NavBar.vue'
-</script>
-
 <template>
   
-  <Navbar />
+  <h1>Hello World!</h1>
   
 </template>
